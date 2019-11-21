@@ -1,0 +1,9 @@
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${USERNAME:root}
+    password: ${PASSWORD:root}
+    url: jdbc:mysql://47.104.201.221:3306/mall?characterEncoding=utf-8&userSSL=false
+server:
+  port: 9001
