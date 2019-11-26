@@ -1,6 +1,5 @@
 package com.example.pay;
 
-import com.lly835.bestpay.model.PayRequest;
 import com.lly835.bestpay.model.PayResponse;
 
 import java.math.BigDecimal;
@@ -11,5 +10,9 @@ public interface IPayService {
      */
     PayResponse create(String orderId, BigDecimal amount);
 
-    void asyncNotify(String notifyData);
+    /**
+     * 接收 订单支付后的异步通知（我们设置的回调）
+     * @param notifyData 通知内容
+     */
+    String asyncNotify(String notifyData);
 }

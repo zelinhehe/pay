@@ -21,6 +21,9 @@ public class PayService implements IPayService {
     @Override
     public PayResponse create(String orderId, BigDecimal amount) {
 
+        // 写入数据库，创建订单记录
+
+
         PayRequest request = new PayRequest();
         request.setOrderName("1321-我的订单");
         request.setOrderId(orderId);
@@ -34,9 +37,22 @@ public class PayService implements IPayService {
     }
 
     @Override
-    public void asyncNotify(String notifyData) {
-        // 签名校验 option+cmd+b 查看源码
+    public String asyncNotify(String notifyData) {
+        // 1.签名校验 option+cmd+b 查看源码
         PayResponse payResponse = bestPayService.asyncNotify(notifyData);
         log.info("payResponse={}", payResponse);
+
+        // 2.金额校验（从数据库中查订单，看异步通知回调中的金额是否和创建订单时记录的金额一致）
+
+
+        // 3.修改订单状态
+
+
+        // 4.告诉微信我收到通知了，不要继续通知了
+        return "<xml>\n" +
+                "  <return_code><![CDATA[SUCCESS]]></return_code>\n" +
+                "  <return_msg><![CDATA[OK]]></return_msg>\n" +
+                "</xml>";
+
     }
 }
