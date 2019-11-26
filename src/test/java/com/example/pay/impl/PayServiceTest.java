@@ -1,6 +1,7 @@
 package com.example.pay.impl;
 
 import com.example.pay.PayApplicationTests;
+import com.lly835.bestpay.enums.BestPayTypeEnum;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,6 +19,6 @@ public class PayServiceTest extends PayApplicationTests {
         // BigDecimal.valueOf(0.01)
         // new BigDecimal("0.01")
         // new BigDecimal(0.01)  这是错误的
-        payService.create("12413231212", BigDecimal.valueOf(0.01));
+        payService.create("12413231212", BigDecimal.valueOf(0.01), BestPayTypeEnum.WXPAY_NATIVE);
     }
 }

@@ -1,6 +1,7 @@
 package com.example.pay.impl;
 
 import com.example.pay.IPayService;
+import com.lly835.bestpay.enums.BestPayPlatformEnum;
 import com.lly835.bestpay.enums.BestPayTypeEnum;
 import com.lly835.bestpay.model.PayRequest;
 import com.lly835.bestpay.model.PayResponse;
@@ -19,7 +20,11 @@ public class PayService implements IPayService {
     BestPayService bestPayService;
 
     @Override
-    public PayResponse create(String orderId, BigDecimal amount) {
+    public PayResponse create(String orderId, BigDecimal amount, BestPayTypeEnum bestPayTypeEnum) {
+
+        if (bestPayTypeEnum != BestPayTypeEnum.WXPAY_NATIVE && bestPayTypeEnum != BestPayTypeEnum.ALIPAY_PC) {
+            throw new RuntimeException("暂不支持此支付类型。仅支持：微信Native，支付宝PC");
+        }
 
         // 写入数据库，创建订单记录
 
@@ -28,7 +33,8 @@ public class PayService implements IPayService {
         request.setOrderName("1321-我的订单");
         request.setOrderId(orderId);
         request.setOrderAmount(amount.doubleValue());
-        request.setPayTypeEnum(BestPayTypeEnum.WXPAY_NATIVE);
+//        request.setPayTypeEnum(BestPayTypeEnum.WXPAY_NATIVE);
+        request.setPayTypeEnum(bestPayTypeEnum);
         PayResponse response = bestPayService.pay(request);
 
         log.info("response={}", response);
@@ -48,11 +54,16 @@ public class PayService implements IPayService {
         // 3.修改订单状态
 
 
-        // 4.告诉微信我收到通知了，不要继续通知了
-        return "<xml>\n" +
-                "  <return_code><![CDATA[SUCCESS]]></return_code>\n" +
-                "  <return_msg><![CDATA[OK]]></return_msg>\n" +
-                "</xml>";
+        // 4.告诉微信或支付宝我收到通知了，不要继续通知了
+        if (payResponse.getPayPlatformEnum() == BestPayPlatformEnum.WX) {
+            return "<xml>\n" +
+                    "  <return_code><![CDATA[SUCCESS]]></return_code>\n" +
+                    "  <return_msg><![CDATA[OK]]></return_msg>\n" +
+                    "</xml>";
+        } else if (payResponse.getPayPlatformEnum() == BestPayPlatformEnum.ALIPAY) {
+            return "success";
+        }
 
+        throw new RuntimeException("异步通知中不支持的支付平台");
     }
 }
