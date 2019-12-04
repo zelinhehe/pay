@@ -1,4 +1,4 @@
-package com.example.pay.impl;
+package com.example.pay.service.impl;
 
 import com.example.pay.PayApplicationTests;
 import com.lly835.bestpay.enums.BestPayTypeEnum;
@@ -6,8 +6,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
-
-import static org.junit.Assert.*;
 
 public class PayServiceTest extends PayApplicationTests {
 

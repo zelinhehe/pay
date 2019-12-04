@@ -1,6 +1,6 @@
 package com.example.pay.controller;
 
-import com.example.pay.IPayService;
+import com.example.pay.service.IPayService;
 import com.lly835.bestpay.enums.BestPayTypeEnum;
 import com.lly835.bestpay.model.PayResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +21,7 @@ public class PayController {
     @Autowired
     IPayService payService;
 
+    // 创建支付订单
     @GetMapping("/create")
     public ModelAndView create(@RequestParam("orderId") String orderId,
                                @RequestParam("amount")BigDecimal amount,
@@ -40,6 +41,7 @@ public class PayController {
         }
     }
 
+    // 支付回调，异步通知
     @PostMapping("/notify")
     @ResponseBody
     public String AsyncNotify(@RequestBody String notifyData){

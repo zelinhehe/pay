@@ -1,4 +1,4 @@
-package com.example.pay;
+package com.example.pay.service;
 
 import com.lly835.bestpay.enums.BestPayTypeEnum;
 import com.lly835.bestpay.model.PayResponse;
