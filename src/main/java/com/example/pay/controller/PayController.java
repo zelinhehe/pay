@@ -1,6 +1,8 @@
 package com.example.pay.controller;
 
+import com.example.pay.pojo.PayInfo;
 import com.example.pay.service.IPayService;
+import com.lly835.bestpay.config.WxPayConfig;
 import com.lly835.bestpay.enums.BestPayTypeEnum;
 import com.lly835.bestpay.model.PayResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +21,10 @@ import java.util.Map;
 public class PayController {
 
     @Autowired
-    IPayService payService;
+    private IPayService payService;
+
+    @Autowired
+    private WxPayConfig wxPayConfig;
 
     // 创建支付订单
     @GetMapping("/create")
@@ -32,6 +37,8 @@ public class PayController {
         Map<String, String> map = new HashMap<>();
         if (bestPayTypeEnum == BestPayTypeEnum.WXPAY_NATIVE) {
             map.put("codeUrl", response.getCodeUrl());
+            map.put("orderId", orderId);
+            map.put("returnUrl", wxPayConfig.getReturnUrl());
             return new ModelAndView("createForWxNative", map);
         } else if (bestPayTypeEnum == BestPayTypeEnum.ALIPAY_PC) {
             map.put("body", response.getBody());
@@ -47,5 +54,12 @@ public class PayController {
     public String AsyncNotify(@RequestBody String notifyData){
         log.info("notifyData={}", notifyData);
         return payService.asyncNotify(notifyData);
+    }
+
+    @GetMapping("/queryByOrderId")
+    @ResponseBody
+    public PayInfo QueryByOrderId(@RequestParam String orderId) {
+        log.info("查询支付订单 by orderId：" + orderId);
+        return payService.queryByOrderId(orderId);  // alt + enter
     }
 }
