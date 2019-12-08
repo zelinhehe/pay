@@ -77,9 +77,10 @@ public class PayService implements IPayService {
         // 3.修改订单状态
         payInfo.setPlatformStatus(OrderStatusEnum.SUCCESS.name());
         payInfo.setPlatformNumber(payResponse.getOutTradeNo());
-//        payInfo.setUpdateTime(null);
+        // payInfo.setUpdateTime(null);
         payInfoMapper.updateByPrimaryKeySelective(payInfo);
 
+        // TODO:pay发送MQ消息，mall接收MQ消息
 
         // 4.告诉微信或支付宝我收到通知了，不要继续通知了
         if (payResponse.getPayPlatformEnum() == BestPayPlatformEnum.WX) {
